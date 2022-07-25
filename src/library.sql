@@ -5,11 +5,19 @@ CREATE DATABASE lib;
 
 /*
 2. Створити таблицю "книжка" з полями(
- - назва книги(не null, до 120 символів),
- - опис(встановити default значення "Опис відсутній"),
- - дата публікації(не null, default значення "2018-01-01"),
- - автор(не null, до 60 символів),
- - категорія(не null, до 30 символів)
+-  Id not null primary key auto_increment
+-  назва книги(не null, до 120 символів),
+- опис(потрібно подумати який тип даних),
+- дата публікації(не null, default значення "2018-01-01"),#date
+- категорія(не null, до 30 символів),
+- isbn (не null, до 20 символів, унікальний),
+- кількість сторінок(не null)
+- ім"я автора (не null, до 45 символів),
+- прізвище автора (не null, до 45 символів),
+- email автора (не null, до 50 символів)
+- вік автора(не null),
+- дата народження автора(не null),
+- нагороди автора(до 120 символів, якщо нема - то NULL)
 */
 CREATE TABLE books (
     id serial PRIMARY KEY,
@@ -72,7 +80,7 @@ SELECT * FROM books WHERE bookisbn = '1260440214'
 SELECT * FROM books WHERE bookcategory = 'Programming'
 
 /* - витягнути книги в яких кількість сторінок більше 200 та вік автора більше 25 */
-SELECT * FROM books WHERE booksize > 200 AND bookauthorage > 25
+SELECT * FROM (SELECT *,date_part('year', age(bookauthorbirthday))::int AS age FROM books) as t WHERE booksize > 200 AND t.age > 25
 
 /* - витягнути книги, в яких категорія "комедія" або "драма"(назви категорії можете змінити) */
 SELECT * FROM books WHERE bookcategory = 'Programming' OR bookcategory = 'Coding'
